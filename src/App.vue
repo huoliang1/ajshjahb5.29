@@ -4,7 +4,10 @@
       <!-- <Header @addTodo="addTodo"/> -->
       <Header ref="add"/>
       <Main :todos="todos" :updateOne="updateOne" :deleteOne="deleteOne"/>
-      <Footer :todos="todos" :updateAll="updateAll" :deleteAll="deleteAll"/>
+      <!-- props版本 -->
+      <!-- <Footer :todos="todos" :updateAll="updateAll" :deleteAll="deleteAll"/> -->
+      <!-- 全局事件总线版本 -->
+      <Footer :todos="todos" :updateAll="updateAll"/>
     </div>
   </div>
 </template>
@@ -23,6 +26,9 @@ export default {
 
   mounted() {
     this.$refs.add.$on('addTodo',this.addTodo) || []
+    // this.$bus  全局事件总对象
+    // 通过给这个事件总对象绑定事件    //回调还留在父组件当中
+    this.$bus.$on("deleteAll",this.deleteAll)
   },
 
   data() {

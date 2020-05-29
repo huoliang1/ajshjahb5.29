@@ -15,7 +15,7 @@ export default {
       props:{
         todos:Array,
         updateAll:Function,
-        deleteAll:Function
+        // deleteAll:Function  //props 需要  //全局事件总线不需要
       },
 
       computed: {
@@ -44,7 +44,10 @@ export default {
 
       methods: {
            deleteA(){
-              this.deleteAll()
+              // this.deleteAll()   props
+
+              // 获取全局事件总线 去触发事件
+              this.$bus.$emit("deleteAll")
            }
       },
 
