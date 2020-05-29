@@ -1,57 +1,101 @@
 <template>
-
-  <div>
-    <header class="site-header jumbotron">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <h1>请发表对Vue的评论</h1>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container">
-        <Add :addComment="addComment"/>
-
-        <List :comments='comments' :deleteComment="deleteComment"/>
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <!-- <Header @addTodo="addTodo"/> -->
+      <Header ref="add"/>
+      <Main :todos="todos" :updateOne="updateOne" :deleteOne="deleteOne"/>
+      <Footer :todos="todos" :updateAll="updateAll" :deleteAll="deleteAll"/>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
-
-import Add from './components/Add'
-import List from './components/List'
-
+  import Header from "./components/Header"
+  import Main from './components/Main'
+  import Footer from './components/Footer'
 export default {
-    components:{
-        Add,
-        List
-    },
-    data() {
-        return {
-            comments:[
-                {id:1,username:'彭于晏',content:'我最帅'},
-                {id:2,username:'胡歌',content:'vue有点蒙'},
-                {id:3,username:'周星驰',content:'今天晚上吃啥呢'},
-            ]
-        }
-    },
+
+  components: {
+    Header,
+    Main,
+    Footer
+  },
+
+  mounted() {
+    this.$refs.add.$on('addTodo',this.addTodo) || []
+  },
+
+  data() {
+    return {
+            //   todos:[
+            //     {id:1,content:'抽烟',isOver:false},
+            //     {id:2,content:'喝酒',isOver:true},
+            //     {id:3,content:'烫头',isOver:false},
+            // ]
+
+            todos:JSON.parse(localStorage.getItem('todos_key'))
+     }
+  },
 
     methods: {
-        addComment(obj){
-            this.comments.unshift(obj)  //往comments 头部添加一些数据
-        },
-        deleteComment(index){
-            this.comments.splice(index,1)   //chong comments删除指定下标的哪一个数据
-        }
+      addTodo(obj){
+        this.todos.unshift(obj)
+      },
+
+      updateOne(index,val){
+        this.todos[index].isOver = val
+      },
+
+      deleteOne(index){
+          this.todos.splice(index,1)
+      },
+
+      updateAll(val){
+          this.todos.forEach(item => item.isOver = val)
+      },
+      deleteAll(){
+          //把已经完成的  isOver为true的干掉
+          // 也可以认为 把isOver 为false 的留下
+          // 过滤出所有没有完成的,组成新数组，赋值给this.todos
+          this.todos = this.todos.filter(item => !item.isOver)
+       
+      }
     },
+ 
+    watch: {
+    //   todos(newval,oldval){
+          // 一般监视  只能监视todos本身  不能监视内部更深层次的数据  不能监视到数组内部操作对象       
+      //      localStorage.setItem('todos_key',JSON.stringify(newval))
+      // }
+
+
+
+      todos:{
+        // 深度监视,不管本身变化还是内部变化都能监视到
+        deep:true,
+        handler(newval,oldval){
+          localStorage.setItem('todos_key',JSON.stringify(newval))
+        }
+      }
+      
+    },
+
+  beforeDestroy() {
+      // this.$refs.add.$on('addTodo',this.addTodo)
+  },
 
 }
 </script>
 
 <style scoped>
-
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
 
 </style>

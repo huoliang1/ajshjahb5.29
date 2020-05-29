@@ -21,34 +21,36 @@
 <script type="text/ecmascript-6">
 export default {
 
-    props:['addComment'],
-    data() {
-        return {
-            username:'',
-            content:'',
-        }
-    },
+            // props:["addComment"],
+
+        data() {
+            return {
+                username:"",
+                content:""
+            }
+        },
+
+
 
     methods: {
         addC(){
-            // 根据收集到的数据创建一个对象
+            // 根据收集到的数据添加一个对象
             let username = this.username
-            let content= this.username
+            let content = this.content
             let id = Date.now()
-           
-            
-            // 把这个对象添加到comments数组的前面
+            // 把这个对象现价到comments 数组的前面
+         
             if(username.trim() && content.trim()){
-                let obj = {
-                   username,
-                   content, 
-                   id
-                }
-                // 不能在这里动comments ,必须使用App当中对应的方法去操作
-               this.addComment(obj)
+                   let obj ={
+                    username,
+                    content,
+                    id
+                 }
+                // this.addComment(obj)
+                this.$emit('addComment',obj)
             }
-            this.username=''
-            this.username=''
+            this.username=""
+            this.content =""
         }
     },
 }
