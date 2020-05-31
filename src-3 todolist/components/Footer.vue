@@ -11,6 +11,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import PubSub from 'pubsub-js'
 export default {
       props:{
         todos:Array,
@@ -36,7 +37,9 @@ export default {
                     return this.overNum === this.allNum && this.allNum > 0
                 },
                 set(val){
-                    this.updateAll(val)
+                    // this.updateAll(val)   //props用法
+                    // 消息的发布
+                    PubSub.publish('mas',val)
                 }
           }
 

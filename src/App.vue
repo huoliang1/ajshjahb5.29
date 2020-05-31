@@ -1,107 +1,55 @@
 <template>
-  <div class="todo-container">
-    <div class="todo-wrap">
-      <!-- <Header @addTodo="addTodo"/> -->
-      <Header ref="add"/>
-      <Main :todos="todos" :updateOne="updateOne" :deleteOne="deleteOne"/>
-      <!-- props版本 -->
-      <!-- <Footer :todos="todos" :updateAll="updateAll" :deleteAll="deleteAll"/> -->
-      <!-- 全局事件总线版本 -->
-      <Footer :todos="todos" :updateAll="updateAll"/>
-    </div>
-  </div>
+<div>
+      <!-- 第一次使用子组件 -->
+    <Child>
+        <!-- 父组件当中给子组件插槽传递内容
+            一个template代表的是给一个插槽的内容
+            如果是给具名插槽的，那么template需要带上名字
+            template如果传递内容（标签）比较多的时候，我们需要带上
+            如果传递的内容就一个标签，那么template是可以省略的
+         -->
+        <!-- 父传子 -->
+         <!-- 给默认插槽使用的 -->
+        <template>
+            <h2>彭于晏真帅1</h2>
+            <span>嘿嘿</span>  
+        </template>
+        <!-- 给具名插槽使用的 -->
+        <!-- <template slot="aa">
+            <p>我是具名的内容</p>
+        </template> -->
+        <!-- 如果template内部只有一个标签可以简写 -->
+        <p slot="aa">我是具名的内容</p>
+        
+
+        <!-- 作用域插槽是依赖父组件决定子组件的展现 -->
+        <!-- 如果isShow是true,我们就让子组件当中所有的内容前面带个√ -->
+        <!-- 子传父 -->
+        <span slot-scope="slotProps" v-show="isShow" slot="uu">
+            √{{slotProps.person.name}}
+        </span>
+
+    </Child>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Header from "./components/Header"
-  import Main from './components/Main'
-  import Footer from './components/Footer'
+import Child from './components/Child'
 export default {
-
-  components: {
-    Header,
-    Main,
-    Footer
-  },
-
-  mounted() {
-    this.$refs.add.$on('addTodo',this.addTodo) || []
-    // this.$bus  全局事件总对象
-    // 通过给这个事件总对象绑定事件    //回调还留在父组件当中
-    this.$bus.$on("deleteAll",this.deleteAll)
-  },
-
-  data() {
-    return {
-            //   todos:[
-            //     {id:1,content:'抽烟',isOver:false},
-            //     {id:2,content:'喝酒',isOver:true},
-            //     {id:3,content:'烫头',isOver:false},
-            // ]
-
-            todos:JSON.parse(localStorage.getItem('todos_key'))
-     }
-  },
-
-    methods: {
-      addTodo(obj){
-        this.todos.unshift(obj)
-      },
-
-      updateOne(index,val){
-        this.todos[index].isOver = val
-      },
-
-      deleteOne(index){
-          this.todos.splice(index,1)
-      },
-
-      updateAll(val){
-          this.todos.forEach(item => item.isOver = val)
-      },
-      deleteAll(){
-          //把已经完成的  isOver为true的干掉
-          // 也可以认为 把isOver 为false 的留下
-          // 过滤出所有没有完成的,组成新数组，赋值给this.todos
-          this.todos = this.todos.filter(item => !item.isOver)
-       
-      }
-    },
- 
-    watch: {
-    //   todos(newval,oldval){
-          // 一般监视  只能监视todos本身  不能监视内部更深层次的数据  不能监视到数组内部操作对象       
-      //      localStorage.setItem('todos_key',JSON.stringify(newval))
-      // }
-
-
-
-      todos:{
-        // 深度监视,不管本身变化还是内部变化都能监视到
-        deep:true,
-        handler(newval,oldval){
-          localStorage.setItem('todos_key',JSON.stringify(newval))
-        }
-      }
-      
+  
+    components:{
+      Child
     },
 
-  beforeDestroy() {
-      // this.$refs.add.$on('addTodo',this.addTodo)
-  },
-
+    data () {
+      return {
+        isShow:true
+      }
+    }
 }
 </script>
 
 <style scoped>
-.todo-container {
-  width: 600px;
-  margin: 0 auto;
-}
-.todo-container .todo-wrap {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
+
 
 </style>
