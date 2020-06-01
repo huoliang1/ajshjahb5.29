@@ -23,7 +23,17 @@ module.exports = {
                 use: {
                   loader: 'babel-loader',
                   options: {
-                    presets: ['@babel/preset-env']
+                    presets: ['@babel/preset-env'],
+                    // 解决elemrnt-ui按需引入  减少体积
+                    plugins: [
+                      [
+                        "component",
+                        {
+                          "libraryName": "element-ui",
+                          "styleLibraryName": "theme-chalk"
+                        }
+                      ],
+                    ]
                   }
                 }
               },
@@ -53,6 +63,11 @@ module.exports = {
             {
               test: /\.vue$/,
               loader: 'vue-loader'
+            },
+            // 配置loder 处理字体图标
+            {
+              test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+              loader: 'file-loader'
             }
         ]
     },
@@ -81,10 +96,18 @@ module.exports = {
         // 配置 自动打包 打开浏览器
         // 命令  npm install webpack-dev-server --save-dev
         devServer: {
-            open: true,
-            port: 8080,
-            quiet:true,
-          },
+                open: true,
+                port: 8080,
+                quiet:true,
+                proxy: {
+                  "/api": { //这个api是为了告诉代理，以后什么样的请求，需要给我代理转发
+                    target: "http://localhost:4000",
+                    // 这一行就是把api去掉
+                    pathRewrite: {"^/api" : ""},
+                    changeOrigin:true   // 支持跨域, 如果协议/主机也不相同, 必须加上
+                  }                                       
+                }     
+        },
         //   定位出错所在的原始代码行
           devtool:  'cheap-module-eval-source-map',
 

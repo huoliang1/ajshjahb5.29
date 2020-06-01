@@ -1,19 +1,19 @@
 <template>
-<div>
-      <Search></Search>
-      <Main></Main>
-</div>
+  <div class="container">
+        <Search/>
+        <Main/>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Search from './components/Search'
 import Main from './components/Main'
-
 export default {
-    component:{
-        Search,
-          Main
-    }
+  components:{
+      Search,
+      Main
+  }
+  
 }
 </script>
 
@@ -21,5 +21,3 @@ export default {
 
 
 </style>
-
-
