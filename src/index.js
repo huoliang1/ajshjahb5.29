@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import '@babel/polyfill'
-import store from './vuex/store'
+import router from './router/index'
 new Vue({
-  // 全局事件总线
-  beforeCreate(){
-      Vue.prototype.$bus =this
-  },
-  el: '#root',
-  render: h => h(App),
-  store //注册vuex 只有在这里注册以后vuex才能生效
-  // 注册好之后，每个组件当中都可以通过this.$store拿到我们的vuex store
+      // 全局事件总线
+      beforeCreate(){
+          Vue.prototype.$bus =this
+      },
+      el: '#root',
+      render: h => h(App),
+      router   //当我们在这里注册路由的时候  组件对象当中可以获取到
+      // 两个对象  this.$router 和 this.$route
+      // this.$router 代表的是路由器对象
+      // this.$route  代表的是当前路由器对象
 });

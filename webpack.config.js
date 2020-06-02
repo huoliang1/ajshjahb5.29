@@ -9,7 +9,8 @@ module.exports = {
   entry: './src/index.js',  //入口
   output: {
     path: path.resolve(__dirname, 'dist'),  //打包完成后的文件
-    filename: 'min.js'
+    filename: 'min.js',
+    publicPath: '/'
   },
 
 
@@ -99,6 +100,7 @@ module.exports = {
                 open: true,
                 port: 8080,
                 quiet:true,
+                
                 proxy: {
                   "/api": { //这个api是为了告诉代理，以后什么样的请求，需要给我代理转发
                     target: "http://localhost:4000",
@@ -106,7 +108,8 @@ module.exports = {
                     pathRewrite: {"^/api" : ""},
                     changeOrigin:true   // 支持跨域, 如果协议/主机也不相同, 必须加上
                   }                                       
-                }     
+                },
+                historyApiFallback: true,     
         },
         //   定位出错所在的原始代码行
           devtool:  'cheap-module-eval-source-map',
